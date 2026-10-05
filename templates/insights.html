@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="{{ 'hi' if language == 'hi' else 'en' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Insights | CropSense</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Crop<span>Sense</span>
+    </div>
+
+    <div class="nav-links">
+
+        {% if language == "hi" %}
+
+            <a href="/">होम</a>
+            <a href="/recommend">फसल सिफारिश</a>
+            <a href="/insights" class="active">जानकारी</a>
+            <a href="/assistant">सहायक</a>
+            <a href="/about">हमारे बारे में</a>
+
+        {% else %}
+
+            <a href="/">Home</a>
+            <a href="/recommend">Recommendation</a>
+            <a href="/insights" class="active">Insights</a>
+            <a href="/assistant">Assistant</a>
+            <a href="/about">About</a>
+
+        {% endif %}
+
+        <div class="language-switcher">
+            <a href="/set-language/en">English</a>
+            <span>|</span>
+            <a href="/set-language/hi">हिंदी</a>
+        </div>
+
+    </div>
+
+</nav>
+
+
+<main class="insights-page">
+
+
+    <!-- PAGE INTRO -->
+
+    <section class="insights-intro">
+
+        {% if language == "hi" %}
+
+            <p class="eyebrow">मॉडल की जानकारी</p>
+
+            <h1>
+                मॉडल के अंदर<br>
+                <span>क्या हो रहा है?</span>
+            </h1>
+
+            <p>
+                जानें कि प्रशिक्षित Random Forest मॉडल
+                मिट्टी और मौसम की जानकारी का उपयोग करके
+                फसल की सिफारिश कैसे करता है।
+            </p>
+
+        {% else %}
+
+            <p class="eyebrow">MODEL INSIGHTS</p>
+
+            <h1>
+                What is happening<br>
+                <span>inside the model?</span>
+            </h1>
+
+            <p>
+                Explore how the trained Random Forest model uses
+                environmental and soil information to recommend crops.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- ACCURACY -->
+
+    <section class="accuracy-section">
+
+        <div class="accuracy-text">
+
+            {% if language == "hi" %}
+
+                <p class="eyebrow">मॉडल का प्रदर्शन</p>
+
+                <h2>99% सटीकता</h2>
+
+                <p>
+                    प्रशिक्षित Random Forest मॉडल ने
+                    विकास के दौरान उपयोग किए गए टेस्ट डेटा पर
+                    लगभग 99% सटीकता प्राप्त की।
+                </p>
+
+                <div class="model-tag">
+                    Random Forest Classifier
+                </div>
+
+            {% else %}
+
+                <p class="eyebrow">MODEL PERFORMANCE</p>
+
+                <h2>99% accuracy</h2>
+
+                <p>
+                    The trained Random Forest model achieved approximately
+                    99% accuracy on the test data used during development.
+                </p>
+
+                <div class="model-tag">
+                    Random Forest Classifier
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="accuracy-ring">
+
+            <div class="accuracy-ring-inner">
+
+                <strong>{{ accuracy }}%</strong>
+
+                {% if language == "hi" %}
+                    <span>सटीकता</span>
+                {% else %}
+                    <span>accuracy</span>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURE IMPORTANCE -->
+
+    <section class="insight-section">
+
+        <div class="section-heading">
+
+            {% if language == "hi" %}
+
+                <p class="eyebrow">मॉडल को समझें</p>
+
+                <h2>कौन से कारक सबसे महत्वपूर्ण हैं?</h2>
+
+                <p>
+                    ये मान बताते हैं कि Random Forest मॉडल
+                    प्रत्येक इनपुट फीचर को कितना महत्व देता है।
+                </p>
+
+            {% else %}
+
+                <p class="eyebrow">UNDERSTANDING THE MODEL</p>
+
+                <h2>Which factors matter most?</h2>
+
+                <p>
+                    These values show the relative importance assigned
+                    to each input feature by the Random Forest model.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                {% if language == "hi" %}
+
+                    <h3>फीचर का महत्व</h3>
+
+                    <p>
+                        अधिक मान का मतलब है कि उस फीचर का
+                        मॉडल के निर्णयों में अधिक योगदान रहा।
+                    </p>
+
+                {% else %}
+
+                    <h3>Feature importance</h3>
+
+                    <p>
+                        A higher value means the feature contributed more
+                        to the model's decisions.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+            <div class="chart-container">
+                <canvas id="featureChart"></canvas>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RAINFALL -->
+
+    <section class="insight-section">
+
+        <div class="section-heading">
+
+            {% if language == "hi" %}
+
+                <p class="eyebrow">फसल की परिस्थितियां</p>
+
+                <h2>वर्षा की स्थिति में कितना अंतर है?</h2>
+
+                <p>
+                    यह ट्रेनिंग डेटासेट में प्रत्येक फसल के लिए
+                    दर्ज औसत वर्षा की तुलना करता है।
+                </p>
+
+            {% else %}
+
+                <p class="eyebrow">CROP CONDITIONS</p>
+
+                <h2>How do rainfall conditions differ?</h2>
+
+                <p>
+                    This compares the average rainfall recorded for
+                    each crop in the training dataset.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                {% if language == "hi" %}
+
+                    <h3>फसल के अनुसार औसत वर्षा</h3>
+
+                    <p>
+                        यह केवल डेटासेट की तुलना है। इसका मतलब यह नहीं है
+                        कि केवल वर्षा ही फसल तय करती है।
+                    </p>
+
+                {% else %}
+
+                    <h3>Average rainfall by crop</h3>
+
+                    <p>
+                        This is a dataset comparison, not a statement
+                        that rainfall alone determines the crop.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+            <div class="chart-container rainfall-chart">
+                <canvas id="rainfallChart"></canvas>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    // ==========================================
+    // FEATURE IMPORTANCE CHART
+    // ==========================================
+
+    {% if language == "hi" %}
+
+    const featureNames = [
+        "नाइट्रोजन (N)",
+        "फॉस्फोरस (P)",
+        "पोटैशियम (K)",
+        "तापमान",
+        "नमी",
+        "पीएच",
+        "वर्षा"
+    ];
+
+    {% else %}
+
+    const featureNames = {{ feature_names | tojson }};
+
+    {% endif %}
+
+
+    const featureImportance = {{ feature_importance | tojson }};
+
+
+    new Chart(
+        document.getElementById("featureChart"),
+        {
+            type: "bar",
+
+            data: {
+
+                labels: featureNames,
+
+                datasets: [{
+
+                    data: featureImportance,
+
+                    borderRadius: 7,
+
+                    barThickness: 28
+
+                }]
+
+            },
+
+            options: {
+
+                indexAxis: "y",
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+
+                        callbacks: {
+
+                            label: function(context) {
+
+                                {% if language == "hi" %}
+
+                                return " महत्व: " +
+                                    (context.raw * 100).toFixed(1) +
+                                    "%";
+
+                                {% else %}
+
+                                return " Importance: " +
+                                    (context.raw * 100).toFixed(1) +
+                                    "%";
+
+                                {% endif %}
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        beginAtZero: true,
+
+                        max: Math.max(...featureImportance) * 1.15,
+
+                        ticks: {
+
+                            callback: function(value) {
+
+                                return (value * 100).toFixed(0) + "%";
+
+                            }
+
+                        },
+
+                        grid: {
+                            display: false
+                        }
+
+                    },
+
+                    y: {
+
+                        grid: {
+                            display: false
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+
+    // ==========================================
+    // RAINFALL BY CROP CHART
+    // ==========================================
+
+    const cropNames = {{ crop_names | tojson }};
+
+    const cropRainfall = {{ crop_rainfall | tojson }};
+
+
+    new Chart(
+        document.getElementById("rainfallChart"),
+        {
+            type: "bar",
+
+            data: {
+
+                labels: cropNames,
+
+                datasets: [{
+
+                    data: cropRainfall,
+
+                    borderRadius: 6,
+
+                    barThickness: 18
+
+                }]
+
+            },
+
+            options: {
+
+                indexAxis: "y",
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        beginAtZero: true,
+
+                        title: {
+
+                            display: true,
+
+                            {% if language == "hi" %}
+
+                            text: "औसत वर्षा"
+
+                            {% else %}
+
+                            text: "Average rainfall"
+
+                            {% endif %}
+
+                        },
+
+                        grid: {
+                            display: false
+                        }
+
+                    },
+
+                    y: {
+
+                        grid: {
+                            display: false
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+</script>
+
+
+</body>
+</html>

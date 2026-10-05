@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Assistant | CropSense</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Crop<span>Sense</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/recommend">Recommendation</a>
+        <a href="/insights">Insights</a>
+        <a href="/assistant" class="active">Assistant</a>
+        <a href="/about">About</a>
+    </div>
+
+</nav>
+
+
+<main class="assistant-page">
+
+    <section class="assistant-intro">
+
+        <p class="eyebrow">CROPSENSE ASSISTANT</p>
+
+        <h1>
+            Ask about your
+            <span>crop data.</span>
+        </h1>
+
+        <p>
+            Get simple explanations about the factors used by
+            the crop recommendation system.
+        </p>
+
+    </section>
+
+
+    <section class="chat-box">
+
+        <div class="chat-header">
+
+            <div class="assistant-icon">
+                C
+            </div>
+
+            <div>
+                <h3>CropSense Assistant</h3>
+                <p>Project knowledge assistant</p>
+            </div>
+
+        </div>
+
+
+        <div class="chat-messages" id="chatMessages">
+
+            <div class="message assistant-message">
+                Hi! I can help you understand the CropSense project.
+                Try asking me about N, P, K, pH, rainfall, humidity,
+                temperature, or the crop recommendation model.
+            </div>
+
+        </div>
+
+
+        <div class="suggestions">
+
+            <button onclick="askQuestion('What is N, P and K?')">
+                What is N, P and K?
+            </button>
+
+            <button onclick="askQuestion('What does pH mean?')">
+                What does pH mean?
+            </button>
+
+            <button onclick="askQuestion('How does the model work?')">
+                How does the model work?
+            </button>
+
+            <button onclick="askQuestion('What is Random Forest?')">
+                What is Random Forest?
+            </button>
+
+        </div>
+
+
+        <form class="chat-input-area" onsubmit="sendMessage(event)">
+
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Ask something about crops..."
+                autocomplete="off"
+            >
+
+            <button type="submit">
+                Send
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<script>
+
+function askQuestion(question) {
+
+    document.getElementById("userInput").value = question;
+
+    sendMessage(new Event("submit"));
+
+}
+
+
+function sendMessage(event) {
+
+    event.preventDefault();
+
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
+
+    if (message === "") {
+        return;
+    }
+
+    addMessage(message, "user-message");
+
+    input.value = "";
+
+    setTimeout(function() {
+
+        const response = getResponse(message);
+
+        addMessage(response, "assistant-message");
+
+    }, 400);
+
+}
+
+
+function addMessage(message, className) {
+
+    const chatMessages = document.getElementById("chatMessages");
+
+    const messageDiv = document.createElement("div");
+
+    messageDiv.className = "message " + className;
+
+    messageDiv.textContent = message;
+
+    chatMessages.appendChild(messageDiv);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+}
+
+
+function getResponse(question) {
+
+    const q = question.toLowerCase();
+
+
+    if (
+        q.includes("n, p") ||
+        q.includes("nitrogen") ||
+        q.includes("phosphorus") ||
+        q.includes("potassium")
+    ) {
+
+        return "N, P and K represent Nitrogen, Phosphorus and Potassium. They are important soil nutrients used as inputs by the crop recommendation model.";
+
+    }
+
+
+    if (
+        q.includes("ph") ||
+        q.includes("soil acidity")
+    ) {
+
+        return "pH describes how acidic or alkaline the soil is. The model uses the measured soil pH as one of its input features.";
+
+    }
+
+
+    if (
+        q.includes("humidity")
+    ) {
+
+        return "Humidity tells us how much moisture is present in the air. It is one of the environmental features used by the model.";
+
+    }
+
+
+    if (
+        q.includes("temperature")
+    ) {
+
+        return "Temperature is another environmental input. Different crops are associated with different temperature conditions in the dataset.";
+
+    }
+
+
+    if (
+        q.includes("rainfall") ||
+        q.includes("rain")
+    ) {
+
+        return "Rainfall represents the amount of rain associated with the recorded crop conditions. It is one of the seven features given to the model.";
+
+    }
+
+
+    if (
+        q.includes("random forest")
+    ) {
+
+        return "Random Forest is a machine learning algorithm that combines many decision trees to make a prediction. Your CropSense model uses a Random Forest classifier to recommend a crop.";
+
+    }
+
+
+    if (
+        q.includes("model") ||
+        q.includes("work") ||
+        q.includes("recommend")
+    ) {
+
+        return "The model takes seven inputs — N, P, K, temperature, humidity, pH and rainfall — and uses patterns learned from the training dataset to predict a suitable crop.";
+
+    }
+
+
+    if (
+        q.includes("crop") &&
+        (q.includes("dataset") || q.includes("data"))
+    ) {
+
+        return "The dataset contains 2,200 records covering 22 different crops. Each record contains seven input features and one crop label.";
+
+    }
+
+
+    if (
+        q.includes("hello") ||
+        q.includes("hi") ||
+        q.includes("hey")
+    ) {
+
+        return "Hi! Ask me anything about the CropSense model, its inputs, or the crop dataset.";
+
+    }
+
+
+    return "I can currently answer questions about the CropSense project, including N, P, K, temperature, humidity, pH, rainfall, Random Forest and how the recommendation model works.";
+
+}
+
+</script>
+
+</body>
+</html>
+

@@ -1,85 +1,288 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Crop Recommendation System</title>
+    <title>Crop Intelligence</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <div class="container">
+    <!-- Navigation -->
 
-        <div class="header">
-            <h1>Crop Recommendation System</h1>
-            <p>Enter the soil and environmental conditions to get a suitable crop recommendation.</p>
+    
+
+       <nav class="navbar">
+
+    <div class="logo">
+        Crop<span>Intelligence</span>
+    </div>
+
+    <div class="nav-links">
+
+        {% if language == "hi" %}
+
+            <a href="/" class="active">होम</a>
+            <a href="/recommend">फसल सिफारिश</a>
+            <a href="/insights">जानकारी</a>
+            <a href="/assistant">सहायक</a>
+            <a href="/about">हमारे बारे में</a>
+
+        {% else %}
+
+            <a href="/" class="active">Home</a>
+            <a href="/recommend">Recommendation</a>
+            <a href="/insights">Insights</a>
+            <a href="/assistant">Assistant</a>
+            <a href="/about">About</a>
+
+        {% endif %}
+
+        <div class="language-switcher">
+            <a href="/set-language/en">English</a>
+            <span>|</span>
+            <a href="/set-language/hi">हिंदी</a>
         </div>
 
-        <div class="form-box">
+    </div>
 
-            <h2>Enter Crop Conditions</h2>
 
-            <form action="/predict" method="POST">
 
-                <div class="input-group">
-                    <label for="nitrogen">Nitrogen (N)</label>
-                    <input type="number" id="nitrogen" name="nitrogen"
-                           step="any" placeholder="Enter nitrogen value" required>
-                </div>
+    </nav>
 
-                <div class="input-group">
-                    <label for="phosphorus">Phosphorus (P)</label>
-                    <input type="number" id="phosphorus" name="phosphorus"
-                           step="any" placeholder="Enter phosphorus value" required>
-                </div>
 
-                <div class="input-group">
-                    <label for="potassium">Potassium (K)</label>
-                    <input type="number" id="potassium" name="potassium"
-                           step="any" placeholder="Enter potassium value" required>
-                </div>
+    <!-- Hero Section -->
 
-                <div class="input-group">
-                    <label for="temperature">Temperature (°C)</label>
-                    <input type="number" id="temperature" name="temperature"
-                           step="any" placeholder="Enter temperature" required>
-                </div>
+    <section class="hero">
 
-                <div class="input-group">
-                    <label for="humidity">Humidity (%)</label>
-                    <input type="number" id="humidity" name="humidity"
-                           step="any" placeholder="Enter humidity" required>
-                </div>
+        <div class="hero-text">
 
-                <div class="input-group">
-                    <label for="ph">Soil pH</label>
-                    <input type="number" id="ph" name="ph"
-                           step="any" placeholder="Enter soil pH" required>
-                </div>
+            {% if language == "hi" %}
 
-                <div class="input-group">
-                    <label for="rainfall">Rainfall (mm)</label>
-                    <input type="number" id="rainfall" name="rainfall"
-                           step="any" placeholder="Enter rainfall" required>
-                </div>
+                <p class="small-title">
+                    मशीन लर्निंग • कृषि
+                </p>
 
-                <button type="submit">Recommend Crop</button>
+                <h1>
+                    बेहतर फसल का फैसला
+                    <br>
+                    <span>डेटा के साथ।</span>
+                </h1>
 
-            </form>
+                <p class="hero-description">
+                    यह मशीन लर्निंग आधारित फसल सिफारिश प्रणाली है,
+                    जो मिट्टी और मौसम की जानकारी का उपयोग करके
+                    आपके लिए उपयुक्त फसल सुझाती है।
+                </p>
 
-            {% if prediction %}
-            <div class="result">
-                <h3>Recommended Crop</h3>
-                <p>{{ prediction }}</p>
-            </div>
+                <a href="/recommend" class="primary-button">
+                    फसल की सिफारिश शुरू करें
+                </a>
+
+            {% else %}
+
+                <p class="small-title">
+                    MACHINE LEARNING • AGRICULTURE
+                </p>
+
+                <h1>
+                    Smarter crop decisions
+                    <br>
+                    through <span>data.</span>
+                </h1>
+
+                <p class="hero-description">
+                    A machine learning based crop recommendation system
+                    that uses soil and environmental conditions to suggest
+                    suitable crops.
+                </p>
+
+                <a href="/recommend" class="primary-button">
+                    Start Recommendation
+                </a>
+
             {% endif %}
 
         </div>
 
-    </div>
+
+        <!-- Model Card -->
+
+        <div class="hero-card">
+
+            {% if language == "hi" %}
+
+               
+                <div class="card-number">
+                    22
+                </div>
+
+                <p>
+                    उपलब्ध फसलें
+                </p>
+
+                <div class="card-line"></div>
+
+                <div class="card-info">
+
+                    <div>
+                        <strong>2,200</strong>
+                        <span>डेटासेट रिकॉर्ड</span>
+                    </div>
+
+                    <div>
+                        <strong>7</strong>
+                        <span>इनपुट फीचर्स</span>
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <div class="card-top">
+                    <span>MODEL</span>
+                    <span>RANDOM FOREST</span>
+                </div>
+
+                <div class="card-number">
+                    22
+                </div>
+
+                <p>
+                    Crop Classes Available
+                </p>
+
+                <div class="card-line"></div>
+
+                <div class="card-info">
+
+                    <div>
+                        <strong>2,200</strong>
+                        <span>Dataset Records</span>
+                    </div>
+
+                    <div>
+                        <strong>7</strong>
+                        <span>Input Features</span>
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- Project Overview -->
+
+    <section class="overview">
+
+        {% if language == "hi" %}
+
+            <div class="overview-card">
+
+                <h3>फसल सिफारिश</h3>
+
+                <p>
+                    अपनी मिट्टी और मौसम की जानकारी दर्ज करें और
+                    प्रशिक्षित ML मॉडल से फसल की सिफारिश प्राप्त करें।
+                </p>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>मॉडल की जानकारी</h3>
+
+                <p>
+                    मॉडल की सटीकता, डेटा और मॉडल द्वारा उपयोग किए
+                    जाने वाले महत्वपूर्ण फीचर्स के बारे में जानें।
+                </p>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>कृषि रोवर</h3>
+
+                <p>
+                    कृषि निगरानी और खेतों में उपयोग के लिए बनाए गए
+                    हमारे हार्डवेयर आधारित रोवर के बारे में जानें।
+                </p>
+
+            </div>
+
+        {% else %}
+
+            <div class="overview-card">
+
+                <h3>Crop Recommendation</h3>
+
+                <p>
+                    Enter soil and environmental conditions and get a
+                    crop recommendation from the trained ML model.
+                </p>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>Model Insights</h3>
+
+                <p>
+                    Explore model accuracy, dataset information and
+                    important features used by the model.
+                </p>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>Agricultural Rover</h3>
+
+                <p>
+                    Learn about our hardware-based rover designed for
+                    agricultural monitoring and field applications.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        {% if language == "hi" %}
+
+            <p>
+                Crop Intelligence • मशीन लर्निंग और कृषि तकनीक
+            </p>
+
+        {% else %}
+
+            <p>
+                Crop Intelligence • Machine Learning & Agricultural Technology
+            </p>
+
+        {% endif %}
+
+    </footer>
 
 </body>
 </html>
